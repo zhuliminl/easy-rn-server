@@ -4,3 +4,4 @@ database/dbUrl.go
 .DS_Store
 
 easyrn-server
+.env
