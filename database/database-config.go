@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/zhuliminl/easyrn-server/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -28,6 +29,7 @@ func SetupDatabaseConnection() *gorm.DB {
 	}
 
 	// 数据迁移
+	db.AutoMigrate(&entity.User{}, &entity.Book{})
 
 	return db
 }
