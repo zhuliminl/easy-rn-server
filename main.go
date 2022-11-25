@@ -16,4 +16,6 @@ func main() {
 	}
 	flag.Parse()
 	config.Init(*environment)
+
+	StartServer()
 }
