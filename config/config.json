@@ -1,0 +1,15 @@
+{
+  "name": "mc_server",
+  "database": {
+    "address": "",
+    "password": "",
+    "port": "",
+    "user": "",
+    "enableCreate": true,
+    "enableLog": false
+  },
+  "server": {
+    "address": "0.0.0.0",
+    "port": "3500"
+  }
+}
