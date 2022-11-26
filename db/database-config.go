@@ -1,17 +1,18 @@
-package database
+package db
 
 import (
 	"fmt"
-	"log"
-	"os"
-
 	"github.com/joho/godotenv"
 	"github.com/zhuliminl/easyrn-server/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"log"
+	"os"
 )
 
-func SetupDatabaseConnection() *gorm.DB {
+var DB *gorm.DB
+
+func Init() {
 	errEnv := godotenv.Load()
 	if errEnv != nil {
 		panic("Failed to load env file")
@@ -30,12 +31,11 @@ func SetupDatabaseConnection() *gorm.DB {
 
 	// 数据迁移
 	db.AutoMigrate(&entity.User{}, &entity.Book{})
-
-	return db
+	DB = db
 }
 
-func CloseDatabaseConnection(db *gorm.DB) {
-	dbSQL, err := db.DB()
+func CloseDatabaseConnection() {
+	dbSQL, err := DB.DB()
 	if err != nil {
 		panic("Failed to close connection from database")
 	}

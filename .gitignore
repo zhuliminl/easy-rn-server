@@ -1,5 +1,5 @@
 database/db-url.go
-database/dbUrl.go
+db/dbUrl.go
 .idea
 .DS_Store
 
