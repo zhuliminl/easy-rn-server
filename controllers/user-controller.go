@@ -24,8 +24,8 @@ type userController struct {
 // @Tags			user
 // @Accept			json
 // @Produce		    json
-// @Param   userId     query     string     false  "用户Id" xx
-// @Param   id     body     dto.User     true  "用户Id" xx
+// @Param           userId     query     string     false  "用户Id" xx
+// @Param           id     body     dto.User     true  "用户Id" xx
 // @Success	        200	{object}	dto.User
 // @Router			/user/getUserByUserId [get]
 func (u userController) GetUserByUserId(c *gin.Context) {
@@ -51,7 +51,7 @@ func (u userController) GetUserByUserId(c *gin.Context) {
 // @Tags			user
 // @Accept			json
 // @Produce		    json
-// @Param   userId     query     string     false  "用户Id" xx
+// @Param           userId     query     string     false  "用户Id" xx
 // @Success	        200	{object}	dto.User
 // @Router			/user/getUserByUserIdBar [get]
 func (u userController) GetUserByUserIdBar(c *gin.Context) {
