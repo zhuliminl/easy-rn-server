@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/zhuliminl/easyrn-server/constant"
 	"github.com/zhuliminl/easyrn-server/service"
@@ -17,17 +18,14 @@ type userController struct {
 }
 
 // GetUserByUserId
-// PingExample godoc
-// @Summary	sum
-// @Schemes
-// @Description	    获取用户信息
-// @Tags			user
-// @Accept			json
-// @Produce		    json
-// @Param           userId     query     string     false  "用户Id" xx
-// @Param           id     body     dto.User     true  "用户Id" xx
-// @Success	        200	{object}	dto.User
-// @Router			/user/getUserByUserId [get]
+// @Tags      user
+// @Summary   获取用户信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param	  userId query dto.User true "用户UUID, 角色ID"
+// @Success    200   {object}  dto.User  "设置用户权限"
+// @Router    /user/getUserByUserId [get]
 func (u userController) GetUserByUserId(c *gin.Context) {
 	userId := c.Query("userId")
 	if userId == "" {
@@ -43,17 +41,6 @@ func (u userController) GetUserByUserId(c *gin.Context) {
 	SendResponseOk(c, constant.RequestSuccess, user)
 }
 
-// GetUserByUserIdBar
-// PingExample godoc
-// @Summary	sum
-// @Schemes
-// @Description	    获取用户信息
-// @Tags			user
-// @Accept			json
-// @Produce		    json
-// @Param           userId     query     string     false  "用户Id" xx
-// @Success	        200	{object}	dto.User
-// @Router			/user/getUserByUserIdBar [get]
 func (u userController) GetUserByUserIdBar(c *gin.Context) {
 	userId := c.Query("userId")
 	if userId == "" {

@@ -13,7 +13,6 @@ import (
 )
 
 func StartServer() {
-
 	// 读取配置
 	c := config.GetConfig()
 	address := c.GetString("server.address")
@@ -50,6 +49,11 @@ func StartServer() {
 	//router.POST("/auth/wx/loginWithEncryptedPhoneData", userController.GetUserById)
 
 	// swagger 文档
+	//docs.SwaggerInfo.Title = "easy react-native"
+	//docs.SwaggerInfo.Description = "easyrn"
+	//docs.SwaggerInfo.Version = "1.0"
+	//docs.SwaggerInfo.Host = "localhost"
+	//docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	docs.SwaggerInfo.BasePath = ""
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	// 启动
