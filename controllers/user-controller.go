@@ -24,7 +24,7 @@ type userController struct {
 // @accept    application/json
 // @Produce   application/json
 // @Param	  userId query dto.User true "用户UUID, 角色ID"
-// @Success    200   {object}  dto.User  "设置用户权限"
+// @Success   200   {object}  dto.User  "设置用户权限"
 // @Router    /user/getUserByUserId [get]
 func (u userController) GetUserByUserId(c *gin.Context) {
 	userId := c.Query("userId")
