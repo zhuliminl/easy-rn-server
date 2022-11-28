@@ -27,8 +27,9 @@ func StartServer() {
 	var (
 		userRepository repository.UserRepository  = repository.NewUserRepository()
 		userService    service.UserService        = service.NewUserService(userRepository)
+		authService    service.AuthService        = service.NewAuthService(userRepository, userService)
 		userController controllers.UserController = controllers.NewUserController(userService)
-		authController controllers.AuthController = controllers.NewAuthController(userService)
+		authController controllers.AuthController = controllers.NewAuthController(userService, authService)
 	)
 	//  router 配置
 	router := gin.New()

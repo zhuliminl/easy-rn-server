@@ -2,8 +2,10 @@ package dto
 
 type User struct {
 	UserId   string `json:"user_id"`
-	Username string `json:"username" form:"name" binding:"required"`
-	Email    string `json:"email" form:"email" binding:"required,email"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+	Password string `json:"password"`
 }
 
 type UserRegister struct {

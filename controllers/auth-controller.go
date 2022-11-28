@@ -12,6 +12,7 @@ type AuthController interface {
 
 type authController struct {
 	userService service.UserService
+	authService service.AuthService
 }
 
 // RegisterByEmail
@@ -33,6 +34,6 @@ func (u authController) RegisterByEmail(c *gin.Context) {
 
 }
 
-func NewAuthController(userService service.UserService) AuthController {
-	return &authController{userService: userService}
+func NewAuthController(userService service.UserService, authService service.AuthService) AuthController {
+	return &authController{userService: userService, authService: authService}
 }
