@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/zhuliminl/easyrn-server/db"
 	"github.com/zhuliminl/easyrn-server/dto"
 	"github.com/zhuliminl/easyrn-server/entity"
 	"github.com/zhuliminl/easyrn-server/repository"
@@ -18,20 +17,19 @@ type userService struct {
 
 func (u userService) CreateUser(userDto dto.User) error {
 	var user entity.User
-	user.Name = userDto.Name
-	//user.Email = "zhuliminl@gmial.com"
+	user.Username = userDto.Username
 	return u.userRepository.CreateUser(user)
 }
 
 func (u userService) GetUserByUserId(userId string) (dto.User, error) {
-	u.CreateUser(dto.User{})
-
-	var user dto.User
-	user.Name = "saul"
-	if err := db.DB.Where("name = ?", userId).First(&user).Error; err != nil {
-		return user, err
+	userEntity, err := u.userRepository.GetUserById(userId)
+	if err != nil {
+		return dto.User{}, err
 	}
-
+	user := dto.User{
+		Username: userEntity.Username,
+		UserId:   userEntity.ID,
+	}
 	return user, nil
 }
 

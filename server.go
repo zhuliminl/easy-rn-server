@@ -28,6 +28,7 @@ func StartServer() {
 		userRepository repository.UserRepository  = repository.NewUserRepository()
 		userService    service.UserService        = service.NewUserService(userRepository)
 		userController controllers.UserController = controllers.NewUserController(userService)
+		authController controllers.AuthController = controllers.NewAuthController(userService)
 	)
 	//  router 配置
 	router := gin.New()
@@ -36,9 +37,9 @@ func StartServer() {
 
 	// 路径配置
 	router.GET("/user/getUserByUserId", userController.GetUserByUserId)
-	router.GET("/user/getMyInfo", userController.GetUserByUserIdBar)
-	//
-	//router.POST("/auth/registerByEmail", userController.GetUserById)
+	//router.GET("/user/getMyInfo", userController.GetUserByUserIdBar)
+
+	router.POST("/auth/registerByEmail", authController.RegisterByEmail)
 	//router.POST("/auth/registerByPhone", userController.GetUserById)
 	//router.POST("/auth/loginByEmail", userController.GetUserById)
 	//router.POST("/auth/loginByPhone", userController.GetUserById)

@@ -10,7 +10,6 @@ import (
 
 type UserController interface {
 	GetUserByUserId(c *gin.Context)
-	GetUserByUserIdBar(c *gin.Context)
 }
 
 type userController struct {
@@ -23,25 +22,10 @@ type userController struct {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param	  userId query dto.User true "用户UUID, 角色ID"
-// @Success   200   {object}  dto.User  "设置用户权限"
+// @Param	  userId query string true "用户 userId"
+// @Success   200   {object}  Response{data=dto.User}  "用户信息"
 // @Router    /user/getUserByUserId [get]
 func (u userController) GetUserByUserId(c *gin.Context) {
-	userId := c.Query("userId")
-	if userId == "" {
-		if Error400(c, errors.New(constant.ParamsEmpty)) {
-			return
-		}
-	}
-	user, err := u.userService.GetUserByUserId(userId)
-	if Error500(c, err) {
-		return
-	}
-
-	SendResponseOk(c, constant.RequestSuccess, user)
-}
-
-func (u userController) GetUserByUserIdBar(c *gin.Context) {
 	userId := c.Query("userId")
 	if userId == "" {
 		if Error400(c, errors.New(constant.ParamsEmpty)) {
