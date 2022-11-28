@@ -20,6 +20,11 @@ func (a authService) VerifyRegisterByEmail(user dto.UserRegisterByEmail) error {
 	if !helper.IsEmailValid(user.Email) {
 		return constError.NewEmailNotValid(nil, "邮箱格式错误")
 	}
+	if !helper.IsPasswordValid(user.Password) {
+		return constError.NewPasswordNotValid(nil, "密码格式错误")
+	}
+
+	//userFind, err := a.userRepository.
 	return nil
 }
 

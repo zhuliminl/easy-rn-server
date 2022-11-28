@@ -7,10 +7,19 @@ import (
 
 type UserRepository interface {
 	GetUserById(userId string) (entity.User, error)
+	GetUserByEmail(email string) (entity.User, error)
 	CreateUser(user entity.User) error
 }
 
 type userRepository struct {
+}
+
+func (u userRepository) GetUserByEmail(email string) (entity.User, error) {
+	var user entity.User
+	if err := db.DB.Where("email = ?", email).First(&user).Error; err != nil {
+		return user, err
+	}
+	return user, nil
 }
 
 func (u userRepository) CreateUser(user entity.User) error {
