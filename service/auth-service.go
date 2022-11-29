@@ -74,7 +74,7 @@ func (a authService) VerifyRegisterByEmail(user dto.UserRegisterByEmail) error {
 }
 
 func (a authService) VerifyRegisterByPhone(user dto.UserRegisterByPhone) error {
-	if !helper.IsEmailValid(user.Phone) {
+	if !helper.IsPhoneValid(user.Phone) {
 		return constError.NewPhoneNumberNotValid(nil, "手机格式错误")
 	}
 	if !helper.IsPasswordValid(user.Password) {

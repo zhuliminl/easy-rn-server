@@ -17,8 +17,7 @@ type userService struct {
 
 func (u userService) CreateUser(userDto dto.User) error {
 	var user entity.User
-	user.Username = userDto.Username
-	return u.userRepository.CreateUser(user)
+	return u.userRepository.CreateUser(userDto)
 }
 
 func (u userService) GetUserByUserId(userId string) (dto.User, error) {

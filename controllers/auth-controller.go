@@ -55,7 +55,7 @@ func (u authController) RegisterByEmail(c *gin.Context) {
 	// 生成 token
 	token := u.jwtService.GenerateToken(user.UserId)
 	res := dto.ResRegister{Token: token, User: user}
-	SendResponseOk(c, constant.RequestError, res)
+	SendResponseOk(c, constant.RequestSuccess, res)
 }
 
 // RegisterByPhone
@@ -94,7 +94,7 @@ func (u authController) RegisterByPhone(c *gin.Context) {
 	// 生成 token
 	token := u.jwtService.GenerateToken(user.UserId)
 	res := dto.ResRegister{Token: token, User: user}
-	SendResponseOk(c, constant.RequestError, res)
+	SendResponseOk(c, constant.RequestSuccess, res)
 }
 
 func NewAuthController(userService service.UserService, authService service.AuthService, jwtService service.JWTService) AuthController {
