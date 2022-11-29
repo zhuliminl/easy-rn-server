@@ -1,8 +1,12 @@
 package service
 
 import (
+	"context"
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/go-redis/redis/v9"
 	uuid "github.com/satori/go.uuid"
 	"github.com/zhuliminl/easyrn-server/constError"
 	"github.com/zhuliminl/easyrn-server/constant"
@@ -191,12 +195,9 @@ func (service wechatService) LoginWithEncryptedPhoneData(wxLoginData dto.WxLogin
 
 func (service wechatService) CreateWxUser(openId string, phone string) error {
 	// 检查是否登陆注册过，登陆过则更新用户
-	user, err := service.userRepository.GetByPhone(phone)
+	user, err := service.userRepository.GetUserByPhone(phone)
 	if constError.Is(err, constError.UserNotFound) {
-		// 新建用户
-		userId := uuid.NewV4()
-		_, err := service.userRepository.CreateByWxLogin(entity.User{
-			UserId:   userId.String(),
+		err := service.userRepository.CreateUser(entity.User{
 			Username: "微信用户",
 			Phone:    phone,
 			OpenId:   openId,
@@ -224,7 +225,7 @@ func (service wechatService) GetUserByLoginSessionId(loginSessionId string) (dto
 		return userDto, err
 	}
 
-	user, err := service.userRepository.GetByOpenId(openId)
+	user, err := service.userRepository.GetUserByOpenId(openId)
 	if err != nil {
 		return userDto, err
 	}

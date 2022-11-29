@@ -12,10 +12,23 @@ type UserRepository interface {
 	GetUserById(userId string) (entity.User, error)
 	GetUserByEmail(email string) (entity.User, error)
 	GetUserByPhone(phone string) (entity.User, error)
+	GetUserByOpenId(openId string) (entity.User, error)
 	CreateUser(user entity.User) error
 }
 
 type userRepository struct {
+}
+
+func (u userRepository) GetUserByOpenId(openId string) (entity.User, error) {
+	var user entity.User
+	if err := db.DB.Where("openId = ?", openId).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, constError.NewUserNotFound(err, "用户不存在")
+		} else {
+			return user, err
+		}
+	}
+	return user, nil
 }
 
 func (u userRepository) GetUserByPhone(phone string) (entity.User, error) {

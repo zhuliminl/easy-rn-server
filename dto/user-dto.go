@@ -1,11 +1,12 @@
 package dto
 
 type User struct {
-	UserId   string `json:"user_id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Phone    string `json:"phone"`
-	Password string `json:"password"`
+	UserId         string `json:"user_id"`
+	Username       string `json:"username"`
+	Email          string `json:"email"`
+	Phone          string `json:"phone"`
+	Password       string `json:"password"`
+	WechatNickname string `json:"wechat_nickname"`
 }
 
 type UserRegister struct {

@@ -38,3 +38,13 @@ func NewUserService(userRepo repository.UserRepository) UserService {
 		userRepository: userRepo,
 	}
 }
+
+func MapEntityUserToUser(user entity.User) dto.User {
+	return dto.User{
+		UserId:         user.ID,
+		Username:       user.Username,
+		Email:          user.Email,
+		Phone:          user.Phone,
+		WechatNickname: user.WechatNickname,
+	}
+}
