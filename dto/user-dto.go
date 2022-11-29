@@ -5,8 +5,9 @@ type User struct {
 	Username       string `json:"username"`
 	Email          string `json:"email"`
 	Phone          string `json:"phone"`
-	Password       string `json:"password"`
+	Password       string `json:"-"`
 	WechatNickname string `json:"wechat_nickname"`
+	OpenId         string `json:"openId"`
 }
 
 type UserRegister struct {

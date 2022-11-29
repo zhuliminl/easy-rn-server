@@ -61,7 +61,7 @@ func (u userRepository) CreateUser(user entity.User) error {
 
 func (u userRepository) GetUserById(userId string) (entity.User, error) {
 	var user entity.User
-	if err := db.DB.Where("user_id = ?", userId).First(&user).Error; err != nil {
+	if err := db.DB.Where("id = ?", userId).First(&user).Error; err != nil {
 		return user, err
 	}
 	return user, nil

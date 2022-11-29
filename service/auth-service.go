@@ -1,6 +1,7 @@
 package service
 
 import (
+	uuid "github.com/satori/go.uuid"
 	"github.com/zhuliminl/easyrn-server/constError"
 	"github.com/zhuliminl/easyrn-server/dto"
 	"github.com/zhuliminl/easyrn-server/helper"
@@ -27,6 +28,7 @@ func (a authService) CreateUserByEmail(userRegister dto.UserRegisterByEmail) (dt
 		username = helper.GenerateDefaultUserName()
 	}
 	var user = dto.User{
+		UserId:   uuid.NewV4().String(),
 		Username: username,
 		Email:    userRegister.Email,
 		Password: userRegister.Password,
@@ -44,6 +46,7 @@ func (a authService) CreateUserByPhone(userRegister dto.UserRegisterByPhone) (dt
 		username = helper.GenerateDefaultUserName()
 	}
 	var user = dto.User{
+		UserId:   uuid.NewV4().String(),
 		Username: username,
 		Phone:    userRegister.Phone,
 		Password: userRegister.Password,

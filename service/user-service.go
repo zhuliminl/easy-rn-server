@@ -16,8 +16,15 @@ type userService struct {
 }
 
 func (u userService) CreateUser(userDto dto.User) error {
-	var user entity.User
-	return u.userRepository.CreateUser(userDto)
+	return u.userRepository.CreateUser(entity.User{
+		ID:             userDto.UserId,
+		Username:       userDto.Username,
+		Email:          userDto.Email,
+		Phone:          userDto.Phone,
+		Password:       userDto.Password,
+		OpenId:         userDto.OpenId,
+		WechatNickname: userDto.WechatNickname,
+	})
 }
 
 func (u userService) GetUserByUserId(userId string) (dto.User, error) {
@@ -25,11 +32,7 @@ func (u userService) GetUserByUserId(userId string) (dto.User, error) {
 	if err != nil {
 		return dto.User{}, err
 	}
-	user := dto.User{
-		Username: userEntity.Username,
-		UserId:   userEntity.ID,
-	}
-	return user, nil
+	return MapEntityUserToUser(userEntity), nil
 }
 
 func NewUserService(userRepo repository.UserRepository) UserService {
@@ -44,6 +47,7 @@ func MapEntityUserToUser(user entity.User) dto.User {
 		Username:       user.Username,
 		Email:          user.Email,
 		Phone:          user.Phone,
+		Password:       user.Password,
 		WechatNickname: user.WechatNickname,
 	}
 }

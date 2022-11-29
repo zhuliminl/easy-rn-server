@@ -1,14 +1,8 @@
 package entity
 
-import (
-	uuid "github.com/satori/go.uuid"
-	"gorm.io/gorm"
-)
-
 type User struct {
-	ID       string `json:"id" gorm:"type:varchar(64)"`
-	Username string `gorm:"type:varchar(255)" json:"username"`
-	//Email    string `gorm:"uniqueIndex;type:varchar(255)" json:"email"`
+	ID             string `json:"id" gorm:"type:varchar(64)"`
+	Username       string `gorm:"type:varchar(255)" json:"username"`
 	Email          string `gorm:"type:varchar(255)" json:"email"`
 	Password       string `gorm:"->;<-;not null" json:"-"`
 	Phone          string `gorm:"type:varchar(255)" json:"phone"`
@@ -16,7 +10,9 @@ type User struct {
 	WechatNickname string `gorm:"type:varchar(255)" json:"wechat_nickname"`
 }
 
+/*
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ID = uuid.NewV4().String()
 	return err
 }
+*/
