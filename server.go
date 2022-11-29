@@ -8,6 +8,7 @@ import (
 	"github.com/zhuliminl/easyrn-server/controllers"
 	"github.com/zhuliminl/easyrn-server/db"
 	"github.com/zhuliminl/easyrn-server/docs"
+	"github.com/zhuliminl/easyrn-server/middlewares"
 	"github.com/zhuliminl/easyrn-server/repository"
 	"github.com/zhuliminl/easyrn-server/service"
 )
@@ -27,21 +28,24 @@ func StartServer() {
 	var (
 		userRepository repository.UserRepository  = repository.NewUserRepository()
 		userService    service.UserService        = service.NewUserService(userRepository)
-		authService    service.AuthService        = service.NewAuthService(userRepository, userService)
+		jwtService     service.JWTService         = service.NewJWTService()
+		authService    service.AuthService        = service.NewAuthService(userRepository, userService, jwtService)
 		userController controllers.UserController = controllers.NewUserController(userService)
-		authController controllers.AuthController = controllers.NewAuthController(userService, authService)
+		authController controllers.AuthController = controllers.NewAuthController(userService, authService, jwtService)
 	)
 	//  router 配置
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+	// 中间件
+	JWTMiddleware := middlewares.JWT(jwtService)
 
 	// 路径配置
 	router.GET("/user/getUserByUserId", userController.GetUserByUserId)
-	//router.GET("/user/getMyInfo", userController.GetUserByUserIdBar)
+	router.GET("/user/getMyInfo", JWTMiddleware, userController.GetMyInfo)
 
 	router.POST("/auth/registerByEmail", authController.RegisterByEmail)
-	//router.POST("/auth/registerByPhone", userController.GetUserById)
+	router.POST("/auth/registerByPhone", authController.RegisterByPhone)
 	//router.POST("/auth/loginByEmail", userController.GetUserById)
 	//router.POST("/auth/loginByPhone", userController.GetUserById)
 	//router.POST("/auth/wx/getOpenId", userController.GetUserById)

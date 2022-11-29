@@ -18,6 +18,7 @@ type AuthService interface {
 type authService struct {
 	userRepository repository.UserRepository
 	userService    UserService
+	jwtService     JWTService
 }
 
 func (a authService) CreateUserByEmail(userRegister dto.UserRegisterByEmail) (dto.User, error) {
@@ -90,9 +91,10 @@ func (a authService) VerifyRegisterByPhone(user dto.UserRegisterByPhone) error {
 	return constError.NewUserDuplicated(nil, "用户已注册")
 }
 
-func NewAuthService(userRepo repository.UserRepository, userService UserService) AuthService {
+func NewAuthService(userRepo repository.UserRepository, userService UserService, jwtService JWTService) AuthService {
 	return &authService{
 		userRepository: userRepo,
 		userService:    userService,
+		jwtService:     jwtService,
 	}
 }
