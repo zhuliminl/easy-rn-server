@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"log"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"os"
 
 	"github.com/zhuliminl/easyrn-server/config"
@@ -20,9 +21,12 @@ import (
 // @in header
 // @name token
 func main() {
+	// UNIX Time is faster and smaller than most timestamps
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+
 	environment := flag.String("e", "development", "")
 	flag.Usage = func() {
-		log.Println("Usage: server -e {mode}")
+		log.Print("Usage: server -e {mode}")
 		os.Exit(1)
 	}
 	flag.Parse()

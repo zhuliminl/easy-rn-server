@@ -9,6 +9,9 @@ import (
 )
 
 type AuthService interface {
+	VerifyCredentialByEmail(email string, password string) (dto.User, error)
+	VerifyCredentialByPhone(phone string, password string) (dto.User, error)
+
 	VerifyRegisterByEmail(user dto.UserRegisterByEmail) error
 	VerifyRegisterByPhone(user dto.UserRegisterByPhone) error
 
@@ -20,6 +23,18 @@ type authService struct {
 	userRepository repository.UserRepository
 	userService    UserService
 	jwtService     JWTService
+}
+
+func (a authService) VerifyCredentialByEmail(email string, password string) (dto.User, error) {
+	var user dto.User
+	// fixme
+	return user, nil
+}
+
+func (a authService) VerifyCredentialByPhone(phone string, password string) (dto.User, error) {
+	var user dto.User
+	// fixme
+	return user, nil
 }
 
 func (a authService) CreateUserByEmail(userRegister dto.UserRegisterByEmail) (dto.User, error) {

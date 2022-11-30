@@ -11,12 +11,72 @@ import (
 type AuthController interface {
 	RegisterByEmail(c *gin.Context)
 	RegisterByPhone(c *gin.Context)
+	LoginByEmail(c *gin.Context)
+	LoginByPhone(c *gin.Context)
 }
 
 type authController struct {
 	userService service.UserService
 	authService service.AuthService
 	jwtService  service.JWTService
+}
+
+// LoginByEmail
+// @Tags      auth
+// @Summary   通过邮箱登录
+// @accept    application/json
+// @Produce   application/json
+// @Param	  data body dto.UserLoginByEmail true "登录"
+// @Success   200   {object}  Response{data=dto.ResToken}  "用户信息和 token"
+// @Router    /auth/loginByEmail [post]
+func (u authController) LoginByEmail(c *gin.Context) {
+	var userLogin dto.UserLoginByEmail
+	err := c.ShouldBindJSON(&userLogin)
+	if Error400(c, err) {
+		return
+	}
+	user, err := u.authService.VerifyCredentialByEmail(userLogin.Email, userLogin.Password)
+	if IsConstError(c, err, constError.UserNotFound) {
+		return
+	}
+	if IsConstError(c, err, constError.PasswordNotMatch) {
+		return
+	}
+	if Error500(c, err) {
+		return
+	}
+
+	token := u.jwtService.GenerateToken(user.UserId)
+	SendResponseOk(c, constant.LoginSuccess, dto.ResToken{Token: token})
+}
+
+// LoginByPhone
+// @Tags      auth
+// @Summary   通过手机号登录
+// @accept    application/json
+// @Produce   application/json
+// @Param	  data body dto.UserLoginByPhone true "登录"
+// @Success   200   {object}  Response{data=dto.ResRegister}  "用户信息和 token"
+// @Router    /auth/loginByPhone [post]
+func (u authController) LoginByPhone(c *gin.Context) {
+	var userLogin dto.UserLoginByPhone
+	err := c.ShouldBindJSON(&userLogin)
+	if Error400(c, err) {
+		return
+	}
+	user, err := u.authService.VerifyCredentialByPhone(userLogin.Phone, userLogin.Password)
+	if IsConstError(c, err, constError.UserNotFound) {
+		return
+	}
+	if IsConstError(c, err, constError.PasswordNotMatch) {
+		return
+	}
+	if Error500(c, err) {
+		return
+	}
+
+	token := u.jwtService.GenerateToken(user.UserId)
+	SendResponseOk(c, constant.LoginSuccess, dto.ResToken{Token: token})
 }
 
 // RegisterByEmail

@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/golang-jwt/jwt/v4"
+	zlog "github.com/rs/zerolog/log"
 	"log"
 	"time"
 )
@@ -33,6 +34,10 @@ type MyCustomClaims struct {
 
 func (j jwtService) GenerateToken(userId string) string {
 	log.Println("saul GenerateToken UserId", userId)
+	if userId == "" {
+		zlog.Error().Msgf("userId is empty")
+		log.Panicln("no userId")
+	}
 	mySigningKey := []byte(j.secretKey)
 	// Create the claims
 	claims := MyCustomClaims{
@@ -54,7 +59,7 @@ func (j jwtService) GenerateToken(userId string) string {
 	ss, err := token.SignedString(mySigningKey)
 	log.Println("saul ==========>>> token %v %v", ss, err)
 	if err != nil {
-		log.Panicln("GenerateTokenError", err)
+		log.Panic("GenerateTokenError", err)
 	}
 	return ss
 }

@@ -46,7 +46,7 @@ func StartServer() {
 
 	router.POST("/auth/registerByEmail", authController.RegisterByEmail)
 	router.POST("/auth/registerByPhone", authController.RegisterByPhone)
-	//router.POST("/auth/loginByEmail", userController.GetUserById)
+	router.POST("/auth/loginByEmail", authController.LoginByEmail)
 	//router.POST("/auth/loginByPhone", userController.GetUserById)
 	//router.POST("/auth/wx/getOpenId", userController.GetUserById)
 	//router.GET("/auth/wx/getMiniLink", userController.GetUserById)
