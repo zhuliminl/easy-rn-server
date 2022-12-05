@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v9"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/zhuliminl/easyrn-server/config"
@@ -14,6 +15,7 @@ import (
 )
 
 func StartServer() {
+
 	// 读取配置
 	c := config.GetConfig()
 	address := c.GetString("server.address")
@@ -22,21 +24,32 @@ func StartServer() {
 	// 数据库启动
 	db.Init()
 
+	// redis 初始化
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
 	defer db.CloseDatabaseConnection()
 
 	// 依赖注入
 	var (
-		userRepository repository.UserRepository  = repository.NewUserRepository()
-		userService    service.UserService        = service.NewUserService(userRepository)
-		jwtService     service.JWTService         = service.NewJWTService()
-		authService    service.AuthService        = service.NewAuthService(userRepository, userService, jwtService)
-		userController controllers.UserController = controllers.NewUserController(userService)
-		authController controllers.AuthController = controllers.NewAuthController(userService, authService, jwtService)
+		userRepository   repository.UserRepository    = repository.NewUserRepository()
+		userService      service.UserService          = service.NewUserService(userRepository)
+		jwtService       service.JWTService           = service.NewJWTService()
+		wechatService    service.WechatService        = service.NewWechatService(userRepository, userService, rdb)
+		authService      service.AuthService          = service.NewAuthService(userRepository, userService, jwtService)
+		userController   controllers.UserController   = controllers.NewUserController(userService)
+		authController   controllers.AuthController   = controllers.NewAuthController(userService, authService, jwtService)
+		wechatController controllers.WechatController = controllers.NewWechatController(wechatService, jwtService)
 	)
+
 	//  router 配置
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+
 	// 中间件
 	JWTMiddleware := middlewares.JWT(jwtService)
 
@@ -47,21 +60,18 @@ func StartServer() {
 	router.POST("/auth/registerByEmail", authController.RegisterByEmail)
 	router.POST("/auth/registerByPhone", authController.RegisterByPhone)
 	router.POST("/auth/loginByEmail", authController.LoginByEmail)
-	//router.POST("/auth/loginByPhone", userController.GetUserById)
-	//router.POST("/auth/wx/getOpenId", userController.GetUserById)
-	//router.GET("/auth/wx/getMiniLink", userController.GetUserById)
-	//router.GET("/auth/wx/getMiniLinkStatus", userController.GetUserById)
-	//router.POST("/auth/wx/scanOver", userController.GetUserById)
-	//router.POST("/auth/wx/loginWithEncryptedPhoneData", userController.GetUserById)
+	router.POST("/auth/loginByPhone", authController.LoginByPhone)
+
+	router.POST("/auth/wx/getOpenId", wechatController.GetOpenID)
+	router.GET("/auth/wx/getMiniLink", wechatController.GetMiniLink)
+	router.GET("/auth/wx/getMiniLinkStatus", wechatController.GetMiniLinkStatus)
+	router.POST("/auth/wx/scanOver", wechatController.ScanOver)
+	router.POST("/auth/wx/loginWithEncryptedPhoneData", wechatController.LoginWithEncryptedPhoneData)
 
 	// swagger 文档
-	//docs.SwaggerInfo.Title = "easy react-native"
-	//docs.SwaggerInfo.Description = "easyrn"
-	//docs.SwaggerInfo.Version = "1.0"
-	//docs.SwaggerInfo.Host = "localhost"
-	//docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	docs.SwaggerInfo.BasePath = ""
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	// 启动
 	router.Run(address + ":" + port)
 }
