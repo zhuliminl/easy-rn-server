@@ -69,7 +69,9 @@ func StartServer() {
 	router.POST("/auth/wx/loginWithEncryptedPhoneData", wechatController.LoginWithEncryptedPhoneData)
 
 	// swagger 文档
-	docs.SwaggerInfo.BasePath = ""
+	docs.SwaggerInfo.BasePath = "/v2"
+	docs.SwaggerInfo.Version = "1.0.0"
+	docs.SwaggerInfo.Host = "http://localhost:3500"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// 启动

@@ -6,3 +6,4 @@ db/dbUrl.go
 easyrn-server
 .env
 docs
+*.rdb
