@@ -46,7 +46,7 @@ func StartServer() {
 
 		userController    controllers.UserController    = controllers.NewUserController(userService)
 		projectController controllers.ProjectController = controllers.NewProjectController(userService, projectService)
-		teamController    controllers.ProjectController = controllers.NewTeamController(userService, teamService)
+		teamController    controllers.TeamController    = controllers.NewTeamController(userService, teamService)
 
 		authController   controllers.AuthController   = controllers.NewAuthController(userService, authService, jwtService)
 		wechatController controllers.WechatController = controllers.NewWechatController(wechatService, jwtService)
