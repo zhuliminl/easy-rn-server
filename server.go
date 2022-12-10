@@ -35,12 +35,19 @@ func StartServer() {
 
 	// 依赖注入
 	var (
-		userRepository   repository.UserRepository    = repository.NewUserRepository()
-		userService      service.UserService          = service.NewUserService(userRepository)
-		jwtService       service.JWTService           = service.NewJWTService()
-		wechatService    service.WechatService        = service.NewWechatService(userRepository, userService, rdb)
-		authService      service.AuthService          = service.NewAuthService(userRepository, userService, jwtService)
-		userController   controllers.UserController   = controllers.NewUserController(userService)
+		userRepository repository.UserRepository = repository.NewUserRepository()
+		userService    service.UserService       = service.NewUserService(userRepository)
+		jwtService     service.JWTService        = service.NewJWTService()
+		projectService service.ProjectService    = service.NewProjectService(userRepository)
+		teamService    service.ProjectService    = service.NewTeamService(userRepository)
+
+		wechatService service.WechatService = service.NewWechatService(userRepository, userService, rdb)
+		authService   service.AuthService   = service.NewAuthService(userRepository, userService, jwtService)
+
+		userController    controllers.UserController    = controllers.NewUserController(userService)
+		projectController controllers.ProjectController = controllers.NewProjectController(userService, projectService)
+		teamController    controllers.ProjectController = controllers.NewTeamController(userService, teamService)
+
 		authController   controllers.AuthController   = controllers.NewAuthController(userService, authService, jwtService)
 		wechatController controllers.WechatController = controllers.NewWechatController(wechatService, jwtService)
 	)
@@ -54,9 +61,11 @@ func StartServer() {
 	JWTMiddleware := middlewares.JWT(jwtService)
 
 	// 路径配置
+	// 用户
 	router.GET("/user/getUserByUserId", userController.GetUserByUserId)
 	router.GET("/user/getMyInfo", JWTMiddleware, userController.GetMyInfo)
 
+	// 认证
 	router.POST("/auth/registerByEmail", authController.RegisterByEmail)
 	router.POST("/auth/registerByPhone", authController.RegisterByPhone)
 	router.POST("/auth/loginByEmail", authController.LoginByEmail)
@@ -67,6 +76,18 @@ func StartServer() {
 	router.GET("/auth/wx/getMiniLinkStatus", wechatController.GetMiniLinkStatus)
 	router.POST("/auth/wx/scanOver", wechatController.ScanOver)
 	router.POST("/auth/wx/loginWithEncryptedPhoneData", wechatController.LoginWithEncryptedPhoneData)
+
+	// 项目
+	router.GET("/project/getAllProject", projectController.GetAllProject)
+	router.POST("/project/createProject", projectController.CreateProject)
+	router.POST("/project/updateProject", projectController.UpdateProject)
+	router.POST("/project/deleteProject", projectController.DeleteProject)
+
+	// 团队
+	router.GET("/team/getAllTeam", teamController.GetAllTeam)
+	router.POST("/team/createTeam", teamController.CreateTeam)
+	router.POST("/team/updateTeam", teamController.UpdateTeam)
+	router.POST("/team/deleteTeam", teamController.DeleteTeam)
 
 	// swagger 文档
 	docs.SwaggerInfo.BasePath = "/v2"

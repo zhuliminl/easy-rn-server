@@ -2,12 +2,13 @@ package db
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/joho/godotenv"
 	"github.com/zhuliminl/easyrn-server/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"os"
 )
 
 var DB *gorm.DB
@@ -30,7 +31,7 @@ func Init() {
 	}
 
 	// 数据迁移
-	db.AutoMigrate(&entity.User{}, &entity.Book{})
+	db.AutoMigrate(&entity.User{}, &entity.Project{}, &entity.Team{})
 	DB = db
 }
 
