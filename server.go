@@ -36,10 +36,11 @@ func StartServer() {
 	// 依赖注入
 	var (
 		userRepository repository.UserRepository = repository.NewUserRepository()
+		teamRepository repository.TeamRepository = repository.NewTeamRepository()
 		userService    service.UserService       = service.NewUserService(userRepository)
 		jwtService     service.JWTService        = service.NewJWTService()
 		projectService service.ProjectService    = service.NewProjectService(userRepository)
-		teamService    service.ProjectService    = service.NewTeamService(userRepository)
+		teamService    service.TeamService       = service.NewTeamService(userRepository, teamRepository)
 
 		wechatService service.WechatService = service.NewWechatService(userRepository, userService, rdb)
 		authService   service.AuthService   = service.NewAuthService(userRepository, userService, jwtService)
@@ -78,16 +79,16 @@ func StartServer() {
 	router.POST("/auth/wx/loginWithEncryptedPhoneData", wechatController.LoginWithEncryptedPhoneData)
 
 	// 项目
-	router.GET("/project/getAllProject", projectController.GetAllProject)
-	router.POST("/project/createProject", projectController.CreateProject)
-	router.POST("/project/updateProject", projectController.UpdateProject)
-	router.POST("/project/deleteProject", projectController.DeleteProject)
+	router.GET("/project/getAllProject", JWTMiddleware, projectController.GetAllProject)
+	router.POST("/project/createProject", JWTMiddleware, projectController.CreateProject)
+	router.POST("/project/updateProject", JWTMiddleware, projectController.UpdateProject)
+	router.POST("/project/deleteProject", JWTMiddleware, projectController.DeleteProject)
 
 	// 团队
-	router.GET("/team/getAllTeam", teamController.GetAllTeam)
-	router.POST("/team/createTeam", teamController.CreateTeam)
-	router.POST("/team/updateTeam", teamController.UpdateTeam)
-	router.POST("/team/deleteTeam", teamController.DeleteTeam)
+	router.GET("/team/getAllTeam", JWTMiddleware, teamController.GetAllTeam)
+	router.POST("/team/createTeam", JWTMiddleware, teamController.CreateTeam)
+	router.POST("/team/updateTeam", JWTMiddleware, teamController.UpdateTeam)
+	router.POST("/team/deleteTeam", JWTMiddleware, teamController.DeleteTeam)
 
 	// swagger 文档
 	docs.SwaggerInfo.BasePath = "/v2"

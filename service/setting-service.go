@@ -12,7 +12,7 @@ type settingService struct {
 }
 
 func NewSettingService(userRepo repository.UserRepository) SettingService {
-	return &userService{
+	return &settingService{
 		userRepository: userRepo,
 	}
 }

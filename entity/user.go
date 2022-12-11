@@ -4,14 +4,15 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	ID             string `json:"id" gorm:"primary_key;type:varchar(64)"`
-	Username       string `gorm:"type:varchar(255)" json:"username"`
-	Email          string `gorm:"type:varchar(255)" json:"email"`
-	Password       string `gorm:"->;<-;not null" json:"-"`
-	Phone          string `gorm:"type:varchar(255)" json:"phone"`
-	OpenId         string `gorm:"type:varchar(255)" json:"openId"`
-	WechatNickname string `gorm:"type:varchar(255)" json:"wechat_nickname"`
+	ID             string `gorm:"primary_key;type:varchar(64)"`
+	Username       string `gorm:"type:varchar(255)"`
+	Email          string `gorm:"type:varchar(255)"`
+	Password       string `gorm:"->;<-;not null"`
+	Phone          string `gorm:"type:varchar(255)"`
+	OpenId         string `gorm:"type:varchar(255)"`
+	WechatNickname string `gorm:"type:varchar(255)"`
 	Projects       []Project
+	Teams          []Team
 }
 
 /*

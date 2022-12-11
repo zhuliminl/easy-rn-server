@@ -12,7 +12,7 @@ type projectService struct {
 }
 
 func NewProjectService(userRepo repository.UserRepository) ProjectService {
-	return &userService{
+	return &projectService{
 		userRepository: userRepo,
 	}
 }

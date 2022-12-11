@@ -13,5 +13,5 @@ type settingController struct {
 }
 
 func NewSettingController(userService service.UserService, settingService service.SettingService) SettingController {
-	return &teamController{userService: userService, teamService: settingService}
+	return &settingController{userService: userService, settingService: settingService}
 }
