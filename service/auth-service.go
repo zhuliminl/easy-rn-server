@@ -4,19 +4,20 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/zhuliminl/easyrn-server/constError"
 	"github.com/zhuliminl/easyrn-server/dto"
+	"github.com/zhuliminl/easyrn-server/entity"
 	"github.com/zhuliminl/easyrn-server/helper"
 	"github.com/zhuliminl/easyrn-server/repository"
 )
 
 type AuthService interface {
-	VerifyCredentialByEmail(email string, password string) (dto.User, error)
-	VerifyCredentialByPhone(phone string, password string) (dto.User, error)
+	VerifyCredentialByEmail(email string, password string) (entity.User, error)
+	VerifyCredentialByPhone(phone string, password string) (entity.User, error)
 
 	VerifyRegisterByEmail(user dto.UserRegisterByEmail) error
 	VerifyRegisterByPhone(user dto.UserRegisterByPhone) error
 
-	CreateUserByEmail(user dto.UserRegisterByEmail) (dto.User, error)
-	CreateUserByPhone(user dto.UserRegisterByPhone) (dto.User, error)
+	CreateUserByEmail(user dto.UserRegisterByEmail) (entity.User, error)
+	CreateUserByPhone(user dto.UserRegisterByPhone) (entity.User, error)
 }
 
 type authService struct {
@@ -25,50 +26,50 @@ type authService struct {
 	jwtService     JWTService
 }
 
-func (a authService) VerifyCredentialByEmail(email string, password string) (dto.User, error) {
-	var user dto.User
+func (a authService) VerifyCredentialByEmail(email string, password string) (entity.User, error) {
+	var user entity.User
 	// fixme
 	return user, nil
 }
 
-func (a authService) VerifyCredentialByPhone(phone string, password string) (dto.User, error) {
-	var user dto.User
+func (a authService) VerifyCredentialByPhone(phone string, password string) (entity.User, error) {
+	var user entity.User
 	// fixme
 	return user, nil
 }
 
-func (a authService) CreateUserByEmail(userRegister dto.UserRegisterByEmail) (dto.User, error) {
+func (a authService) CreateUserByEmail(userRegister dto.UserRegisterByEmail) (entity.User, error) {
 	username := userRegister.Username
 	if username == "" {
 		username = helper.GenerateDefaultUserName()
 	}
-	var user = dto.User{
-		UserId:   uuid.NewV4().String(),
+	var user = entity.User{
+		ID:       uuid.NewV4().String(),
 		Username: username,
 		Email:    userRegister.Email,
 		Password: userRegister.Password,
 	}
 	err := a.userService.CreateUser(user)
 	if err != nil {
-		return dto.User{}, err
+		return entity.User{}, err
 	}
 	return user, nil
 }
 
-func (a authService) CreateUserByPhone(userRegister dto.UserRegisterByPhone) (dto.User, error) {
+func (a authService) CreateUserByPhone(userRegister dto.UserRegisterByPhone) (entity.User, error) {
 	username := userRegister.Username
 	if username == "" {
 		username = helper.GenerateDefaultUserName()
 	}
-	var user = dto.User{
-		UserId:   uuid.NewV4().String(),
+	var user = entity.User{
+		ID:       uuid.NewV4().String(),
 		Username: username,
 		Phone:    userRegister.Phone,
 		Password: userRegister.Password,
 	}
 	err := a.userService.CreateUser(user)
 	if err != nil {
-		return dto.User{}, err
+		return entity.User{}, err
 	}
 	return user, nil
 }

@@ -67,7 +67,7 @@ func (u wechatController) GetMiniLinkStatus(c *gin.Context) {
 			return
 		}
 
-		token := u.jwtService.GenerateToken(userDto.UserId)
+		token := u.jwtService.GenerateToken(userDto.ID)
 		res := dto.ResRegister{Token: token, User: userDto}
 		SendResponseOk(c, constant.RequestSuccess, res)
 		return

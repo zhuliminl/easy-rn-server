@@ -35,7 +35,7 @@ type WechatService interface {
 	ScanOver(loginSessionId string) error
 	GetMiniLinkStatus(loginSessionId string) (dto.MiniLinkStatus, error)
 	LoginWithEncryptedPhoneData(wxLoginData dto.WxLoginData) (dto.ResWxLogin, error)
-	GetUserByLoginSessionId(loginSessionId string) (dto.User, error)
+	GetUserByLoginSessionId(loginSessionId string) (entity.User, error)
 }
 
 type wechatService struct {
@@ -217,8 +217,8 @@ func (service wechatService) CreateWxUser(openId string, phone string) error {
 	return nil
 }
 
-func (service wechatService) GetUserByLoginSessionId(loginSessionId string) (dto.User, error) {
-	var userDto dto.User
+func (service wechatService) GetUserByLoginSessionId(loginSessionId string) (entity.User, error) {
+	var userDto entity.User
 	openId, err := service.rdb.Get(ctx, loginSessionId+constant.PrefixWechatOpenId).Result()
 	if err == redis.Nil {
 		return userDto, errors.New("wechat openId 不存在，可能已过期")

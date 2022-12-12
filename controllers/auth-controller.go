@@ -46,7 +46,7 @@ func (u authController) LoginByEmail(c *gin.Context) {
 		return
 	}
 
-	token := u.jwtService.GenerateToken(user.UserId)
+	token := u.jwtService.GenerateToken(user.ID)
 	SendResponseOk(c, constant.LoginSuccess, dto.ResToken{Token: token})
 }
 
@@ -75,7 +75,7 @@ func (u authController) LoginByPhone(c *gin.Context) {
 		return
 	}
 
-	token := u.jwtService.GenerateToken(user.UserId)
+	token := u.jwtService.GenerateToken(user.ID)
 	SendResponseOk(c, constant.LoginSuccess, dto.ResToken{Token: token})
 }
 
@@ -113,7 +113,7 @@ func (u authController) RegisterByEmail(c *gin.Context) {
 		return
 	}
 	// 生成 token
-	token := u.jwtService.GenerateToken(user.UserId)
+	token := u.jwtService.GenerateToken(user.ID)
 	res := dto.ResRegister{Token: token, User: user}
 	SendResponseOk(c, constant.RequestSuccess, res)
 }
@@ -152,7 +152,7 @@ func (u authController) RegisterByPhone(c *gin.Context) {
 		return
 	}
 	// 生成 token
-	token := u.jwtService.GenerateToken(user.UserId)
+	token := u.jwtService.GenerateToken(user.ID)
 	res := dto.ResRegister{Token: token, User: user}
 	SendResponseOk(c, constant.RequestSuccess, res)
 }
