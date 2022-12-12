@@ -6,13 +6,13 @@ import (
 )
 
 type TeamRepository interface {
-	CreateTeam(team entity.Team) error
+	Save(team entity.Team) error
 }
 
 type teamRepository struct {
 }
 
-func (u teamRepository) CreateTeam(team entity.Team) error {
+func (u teamRepository) Save(team entity.Team) error {
 	return db.DB.Create(&team).Error
 }
 

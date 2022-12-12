@@ -45,7 +45,7 @@ func Init() {
 	}
 
 	// 数据迁移
-	db.AutoMigrate(&entity.User{}, &entity.Project{}, &entity.Team{})
+	db.AutoMigrate(&entity.User{}, &entity.Team{})
 	DB = db
 }
 

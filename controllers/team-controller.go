@@ -32,7 +32,7 @@ func (t teamController) GetAllTeam(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200   {object}  Response{data=dto.TeamCreate}  "团队基础信息"
+// @Param	  data body dto.TeamCreate true "创建一个团队"
 // @Router    /team/createTeam [post]
 func (t teamController) CreateTeam(c *gin.Context) {
 	userId := c.MustGet("CurrentUserId").(string)

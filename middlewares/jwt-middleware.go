@@ -38,7 +38,7 @@ func JWT(jwtService service.JWTService) gin.HandlerFunc {
 			}
 			c.Set("CurrentUserId", userId)
 
-			log.Println("saul >>>>>>>>>>>>>>>>>>>>>>>>>>>> Claims: ", userId)
+			log.Println("saul =====>>> Claims:token 解析的结果（用户id）", userId)
 
 			c.Next()
 		} else if errors.Is(err, jwt.ErrTokenMalformed) {

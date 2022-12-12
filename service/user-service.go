@@ -14,39 +14,16 @@ type userService struct {
 	userRepository repository.UserRepository
 }
 
-func (u userService) CreateUser(userDto entity.User) error {
-	return u.userRepository.CreateUser(entity.User{
-		ID:             userDto.ID,
-		Username:       userDto.Username,
-		Email:          userDto.Email,
-		Phone:          userDto.Phone,
-		Password:       userDto.Password,
-		OpenId:         userDto.OpenId,
-		WechatNickname: userDto.WechatNickname,
-	})
+func (u userService) CreateUser(user entity.User) error {
+	return u.userRepository.CreateUser(user)
 }
 
 func (u userService) GetUserByUserId(userId string) (entity.User, error) {
-	userEntity, err := u.userRepository.GetUserById(userId)
-	if err != nil {
-		return entity.User{}, err
-	}
-	return MapEntityUserToUser(userEntity), nil
+	return u.userRepository.GetUserById(userId)
 }
 
 func NewUserService(userRepo repository.UserRepository) UserService {
 	return &userService{
 		userRepository: userRepo,
-	}
-}
-
-func MapEntityUserToUser(user entity.User) entity.User {
-	return entity.User{
-		ID:             user.ID,
-		Username:       user.Username,
-		Email:          user.Email,
-		Phone:          user.Phone,
-		Password:       user.Password,
-		WechatNickname: user.WechatNickname,
 	}
 }

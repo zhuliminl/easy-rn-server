@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+
 	"github.com/zhuliminl/easyrn-server/constError"
 	"github.com/zhuliminl/easyrn-server/db"
 	"github.com/zhuliminl/easyrn-server/entity"
@@ -61,7 +62,7 @@ func (u userRepository) CreateUser(user entity.User) error {
 
 func (u userRepository) GetUserById(userId string) (entity.User, error) {
 	var user entity.User
-	if err := db.DB.Where("id = ?", userId).First(&user).Error; err != nil {
+	if err := db.DB.Where("id = ?", userId).Preload("Teams").First(&user).Error; err != nil {
 		return user, err
 	}
 	return user, nil

@@ -2,10 +2,13 @@ package controllers
 
 import (
 	"errors"
+
 	"github.com/zhuliminl/easyrn-server/constError"
 
 	"github.com/gin-gonic/gin"
 	"github.com/zhuliminl/easyrn-server/constant"
+	_ "github.com/zhuliminl/easyrn-server/dto"
+	_ "github.com/zhuliminl/easyrn-server/entity"
 	"github.com/zhuliminl/easyrn-server/service"
 )
 
@@ -24,7 +27,7 @@ type userController struct {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200   {object}  Response{data=dto.User}  "用户信息"
+// @Success   200   {object}  Response{data=entity.User}  "用户信息"
 // @Router    /user/getMyInfo [get]
 func (u userController) GetMyInfo(c *gin.Context) {
 	userId := c.MustGet("CurrentUserId").(string)
@@ -50,7 +53,7 @@ func (u userController) GetMyInfo(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Param	  userId query string true "用户 userId"
-// @Success   200   {object}  Response{data=dto.User}  "用户信息"
+// @Success   200   {object}  Response{data=entity.User}  "用户信息"
 // @Router    /user/getUserByUserId [get]
 func (u userController) GetUserByUserId(c *gin.Context) {
 	userId := c.Query("userId")

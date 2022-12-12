@@ -1,10 +1,11 @@
 package service
 
 import (
-	"github.com/golang-jwt/jwt/v4"
-	zlog "github.com/rs/zerolog/log"
 	"log"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
+	zlog "github.com/rs/zerolog/log"
 )
 
 var secretKey = "Test1234"

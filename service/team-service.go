@@ -1,6 +1,7 @@
 package service
 
 import (
+	uuid "github.com/satori/go.uuid"
 	"github.com/zhuliminl/easyrn-server/dto"
 	"github.com/zhuliminl/easyrn-server/entity"
 	"github.com/zhuliminl/easyrn-server/repository"
@@ -16,7 +17,13 @@ type teamService struct {
 }
 
 func (t teamService) CreateTeam(useId string, teamCreate dto.TeamCreate) error {
-	return t.teamRepository.CreateTeam(entity.Team{})
+	team := entity.Team{
+		ID:     uuid.NewV4().String(),
+		UserID: useId,
+		Title:  teamCreate.Title,
+		Desc:   teamCreate.Desc,
+	}
+	return t.teamRepository.Save(team)
 }
 
 func NewTeamService(userRepo repository.UserRepository, teamRepository repository.TeamRepository) TeamService {

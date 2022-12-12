@@ -218,21 +218,20 @@ func (service wechatService) CreateWxUser(openId string, phone string) error {
 }
 
 func (service wechatService) GetUserByLoginSessionId(loginSessionId string) (entity.User, error) {
-	var userDto entity.User
+	var user entity.User
 	openId, err := service.rdb.Get(ctx, loginSessionId+constant.PrefixWechatOpenId).Result()
 	if err == redis.Nil {
-		return userDto, errors.New("wechat openId 不存在，可能已过期")
+		return user, errors.New("wechat openId 不存在，可能已过期")
 	} else if err != nil {
-		return userDto, err
+		return user, err
 	}
 
-	user, err := service.userRepository.GetUserByOpenId(openId)
+	user, err = service.userRepository.GetUserByOpenId(openId)
 	if err != nil {
-		return userDto, err
+		return user, err
 	}
 
-	userDto = MapEntityUserToUser(user)
-	return userDto, nil
+	return user, nil
 }
 
 func NewWechatService(userRepo repository.UserRepository, userService UserService, rdb *redis.Client) WechatService {

@@ -1,9 +1,8 @@
 package entity
 
 type Team struct {
-	ID     uint64 `gorm:"primary_key:auto_increment"`
-	Title  string `gorm:"type:varchar(255)"`
-	Desc   string `gorm:"type:text"`
-	UserID uint64 `gorm:"not null"`
-	User   User   `gorm:"foreignkey:UserID;constraint:onUpdate:CASCADE,onDelete:CASCADE"`
+	ID     string `gorm:"primary_key:auto_increment" json:"team_id"`
+	UserID string `gorm:"not null" json:"creater_id"`
+	Title  string `gorm:"type:varchar(255)" json:"title"`
+	Desc   string `gorm:"type:text" json:"desc"`
 }
